@@ -1,0 +1,4 @@
+{
+
+    "MongoURI": "mongodb+srv://mongo:mongo@cluster0-tedps.mongodb.net/test?retryWrites=true&w=majority"
+}
