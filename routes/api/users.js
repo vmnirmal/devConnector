@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const {check, validationResult}=require('express-validator/check')
 const User = require('../../models/User');
 const gravatar = require('gravatar');
@@ -44,7 +46,18 @@ const salt = await bcrypt.genSalt(10);
 user.password = await bcrypt.hash(password,salt);
 await user.save();
 console.log("request body "+user);
-res.send('User Created ...')
+const payload = {
+   user :{
+    id:user.id
+   } 
+};
+jwt.sign(payload,config.get('privateKey'),{expiresIn:300000},
+(err,token) =>{
+    if(err) throw err;
+    res.json({token:{token}});
+});
+
+//res.send('User Created ...')
 } catch(err){
     return res.status(500).json({errors:[{msg:"server error"}]});
 }
